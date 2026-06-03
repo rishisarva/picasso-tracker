@@ -7,168 +7,69 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --bg: #0a0a0a;
-    --surface: #111111;
-    --surface2: #1a1a1a;
-    --border: #242424;
-    --accent: #e8ff47;
-    --accent2: #ff6b35;
-    --accent3: #7b61ff;
-    --text: #f0f0f0;
-    --text-muted: #666;
-    --text-dim: #444;
-    --done: #4ade80;
-    --pending: #facc15;
-    --exception: #f87171;
-    --routine: #38bdf8;
-    --aeo: #7b61ff;
-    --flavors: #ff6b35;
-    --hemp: #4ade80;
-    --radius: 6px;
+    --bg: #0a0a0a; --surface: #111111; --surface2: #1a1a1a; --border: #242424;
+    --accent: #e8ff47; --text: #f0f0f0; --text-muted: #666; --text-dim: #444;
+    --done: #4ade80; --pending: #facc15; --exception: #f87171; --routine: #38bdf8;
+    --aeo: #7b61ff; --flavors: #ff6b35; --hemp: #4ade80; --radius: 6px;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* ── HEADER ── */
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 32px;
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    background: rgba(10,10,10,0.95);
-    backdrop-filter: blur(12px);
-    z-index: 100;
-  }
-
+  /* HEADER */
+  header { display: flex; align-items: center; justify-content: space-between; padding: 18px 28px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(10,10,10,0.96); backdrop-filter: blur(12px); z-index: 100; }
   .logo { display: flex; align-items: baseline; gap: 10px; }
-  .logo-main { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; color: var(--accent); line-height: 1; }
-  .logo-sub { font-size: 11px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; font-weight: 500; }
-
-  .header-right { display: flex; align-items: center; gap: 16px; }
-  .today-badge { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted); background: var(--surface2); padding: 6px 12px; border-radius: var(--radius); border: 1px solid var(--border); }
-
-  /* ── PAGE TABS ── */
-  .page-tabs {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    background: var(--surface2);
-    border-radius: var(--radius);
-    padding: 3px;
-  }
-
-  .page-tab {
-    font-size: 12px;
-    font-weight: 600;
-    padding: 6px 14px;
-    border-radius: 4px;
-    cursor: pointer;
-    color: var(--text-muted);
-    transition: all 0.15s;
-    letter-spacing: 0.3px;
-    border: none;
-    background: transparent;
-    font-family: 'DM Sans', sans-serif;
-  }
-
+  .logo-main { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 3px; color: var(--accent); }
+  .logo-sub { font-size: 11px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .today-badge { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); background: var(--surface2); padding: 5px 11px; border-radius: var(--radius); border: 1px solid var(--border); }
+  .page-tabs { display: flex; gap: 3px; background: var(--surface2); border-radius: var(--radius); padding: 3px; }
+  .page-tab { font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 4px; cursor: pointer; color: var(--text-muted); border: none; background: transparent; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
   .page-tab:hover { color: var(--text); }
-  .page-tab.active { background: var(--surface); color: var(--accent); box-shadow: 0 1px 4px rgba(0,0,0,0.4); }
+  .page-tab.active { background: var(--surface); color: var(--accent); }
   .page-tab.routine-tab.active { color: var(--routine); }
+  .btn-add { background: var(--accent); color: #000; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 13px; border: none; padding: 8px 18px; border-radius: var(--radius); cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; }
+  .btn-add:hover { transform: translateY(-1px); box-shadow: 0 4px 18px rgba(232,255,71,0.3); }
+  .btn-add.routine-btn { background: var(--routine); }
+  .btn-add.routine-btn:hover { box-shadow: 0 4px 18px rgba(56,189,248,0.3); }
 
-  .btn-add {
-    background: var(--accent);
-    color: #000;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 700;
-    font-size: 13px;
-    border: none;
-    padding: 9px 20px;
-    border-radius: var(--radius);
-    cursor: pointer;
-    letter-spacing: 0.5px;
-    transition: transform 0.1s, box-shadow 0.2s;
-  }
-  .btn-add:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(232,255,71,0.3); }
-  .btn-add:active { transform: translateY(0); }
-  .btn-add.routine-btn { background: var(--routine); box-shadow: none; }
-  .btn-add.routine-btn:hover { box-shadow: 0 4px 20px rgba(56,189,248,0.3); }
-
-  /* ── PAGES ── */
+  /* PAGES */
   .page { display: none; }
   .page.active { display: flex; }
 
-  /* ── LAYOUT (tasks page) ── */
-  .main-layout {
-    display: grid;
-    grid-template-columns: 260px 1fr 300px;
-    min-height: calc(100vh - 69px);
-  }
+  /* LAYOUT */
+  .main-layout { display: grid; grid-template-columns: 240px 1fr 280px; min-height: calc(100vh - 65px); width: 100%; }
 
-  /* ── SIDEBAR LEFT ── */
-  .sidebar-left { border-right: 1px solid var(--border); padding: 24px 20px; display: flex; flex-direction: column; gap: 28px; }
-  .sidebar-section-title { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; margin-bottom: 10px; }
-
-  .nav-item {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 9px 12px; border-radius: var(--radius); cursor: pointer;
-    transition: background 0.15s; font-size: 13.5px; color: var(--text-muted);
-    border: 1px solid transparent;
-  }
+  /* SIDEBAR LEFT */
+  .sidebar-left { border-right: 1px solid var(--border); padding: 22px 18px; display: flex; flex-direction: column; gap: 26px; }
+  .sidebar-section-title { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; margin-bottom: 8px; }
+  .nav-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 11px; border-radius: var(--radius); cursor: pointer; transition: background 0.15s; font-size: 13px; color: var(--text-muted); border: 1px solid transparent; }
   .nav-item:hover { background: var(--surface2); color: var(--text); }
   .nav-item.active { background: var(--surface2); color: var(--accent); border-color: var(--border); }
+  .nav-count { font-family: 'JetBrains Mono', monospace; font-size: 10px; background: var(--border); padding: 2px 6px; border-radius: 20px; color: var(--text-muted); }
+  .client-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 7px; flex-shrink: 0; }
 
-  .nav-count { font-family: 'JetBrains Mono', monospace; font-size: 11px; background: var(--border); padding: 2px 7px; border-radius: 20px; color: var(--text-muted); }
-  .client-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 8px; flex-shrink: 0; }
-
-  /* ── MAIN CONTENT ── */
-  .main-content { padding: 28px 32px; overflow-y: auto; }
-
-  .content-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
-  .content-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; color: var(--text); line-height: 1; }
-
-  .filter-bar { display: flex; gap: 8px; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
-
-  .filter-pill {
-    font-size: 12px; padding: 5px 13px; border-radius: 20px; border: 1px solid var(--border);
-    background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; font-weight: 500;
-  }
+  /* MAIN */
+  .main-content { padding: 26px 28px; overflow-y: auto; }
+  .content-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .content-title { font-family: 'Bebas Neue', sans-serif; font-size: 34px; letter-spacing: 2px; color: var(--text); line-height: 1; }
+  .filter-bar { display: flex; gap: 7px; align-items: center; margin-bottom: 18px; flex-wrap: wrap; }
+  .filter-pill { font-size: 12px; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; font-weight: 500; }
   .filter-pill:hover { border-color: var(--accent); color: var(--text); }
   .filter-pill.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
-
-  .date-input { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 5px 10px; border-radius: var(--radius); cursor: pointer; }
+  .date-input { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 4px 9px; border-radius: var(--radius); cursor: pointer; }
   .date-input:focus { outline: none; border-color: var(--accent); }
 
-  /* ── TASK CARDS ── */
-  .task-list { display: flex; flex-direction: column; gap: 10px; }
-
-  .task-card {
-    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 16px 18px; display: grid; grid-template-columns: auto 1fr auto; gap: 14px;
-    align-items: start; transition: border-color 0.15s, transform 0.1s; cursor: default;
-    position: relative; overflow: hidden;
-  }
-  .task-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
-  .task-card[data-client="AEO Agency"]::before { background: var(--aeo); }
-  .task-card[data-client="Flavors"]::before { background: var(--flavors); }
-  .task-card[data-client="Enjoy Hemp"]::before { background: var(--hemp); }
+  /* TASK CARDS */
+  .task-list { display: flex; flex-direction: column; gap: 8px; }
+  .task-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: start; transition: border-color 0.15s, transform 0.1s; position: relative; overflow: hidden; }
+  .task-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--border); }
+  .task-card[data-primary="AEO Agency"]::before { background: var(--aeo); }
+  .task-card[data-primary="Flavors"]::before { background: var(--flavors); }
+  .task-card[data-primary="Enjoy Hemp"]::before { background: var(--hemp); }
   .task-card:hover { border-color: #333; transform: translateX(2px); }
   .task-card.exception-card { border-color: rgba(248,113,113,0.25); }
 
-  .task-check {
-    width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border); cursor: pointer;
-    flex-shrink: 0; margin-top: 2px; transition: all 0.15s; display: flex; align-items: center; justify-content: center;
-  }
+  .task-check { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border); cursor: pointer; flex-shrink: 0; margin-top: 2px; transition: all 0.15s; display: flex; align-items: center; justify-content: center; }
   .task-check:hover { border-color: var(--done); }
   .task-check.checked { background: var(--done); border-color: var(--done); }
   .task-check.checked::after { content: '✓'; color: #000; font-size: 10px; font-weight: 800; }
@@ -176,258 +77,132 @@
   .task-body { min-width: 0; }
   .task-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 5px; line-height: 1.4; }
   .task-title.done-title { text-decoration: line-through; color: var(--text-dim); }
-  .task-desc { font-size: 12.5px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.5; }
-  .task-meta { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .task-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 7px; line-height: 1.5; }
+  .task-meta { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
 
-  .tag { font-size: 10.5px; padding: 2px 8px; border-radius: 3px; font-weight: 600; letter-spacing: 0.3px; }
-  .tag-client-aeo { background: rgba(123,97,255,0.15); color: var(--aeo); }
-  .tag-client-flavors { background: rgba(255,107,53,0.15); color: var(--flavors); }
-  .tag-client-hemp { background: rgba(74,222,128,0.15); color: var(--hemp); }
+  .tag { font-size: 10px; padding: 2px 7px; border-radius: 3px; font-weight: 600; letter-spacing: 0.3px; white-space: nowrap; }
+  .tag-aeo { background: rgba(123,97,255,0.15); color: var(--aeo); }
+  .tag-flavors { background: rgba(255,107,53,0.15); color: var(--flavors); }
+  .tag-hemp { background: rgba(74,222,128,0.15); color: var(--hemp); }
   .tag-exception { background: rgba(248,113,113,0.15); color: var(--exception); }
   .tag-routine { background: rgba(56,189,248,0.15); color: var(--routine); }
 
-  .priority-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+  .priority-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
   .p-high { background: #f87171; } .p-medium { background: #facc15; } .p-low { background: #4ade80; }
 
-  .task-actions { display: flex; gap: 6px; opacity: 0; transition: opacity 0.15s; }
+  .task-actions { display: flex; gap: 5px; opacity: 0; transition: opacity 0.15s; }
   .task-card:hover .task-actions { opacity: 1; }
-
-  .btn-icon {
-    background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted);
-    width: 28px; height: 28px; border-radius: var(--radius); display: flex; align-items: center;
-    justify-content: center; cursor: pointer; font-size: 13px; transition: all 0.15s;
-  }
+  .btn-icon { background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); width: 27px; height: 27px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; transition: all 0.15s; }
   .btn-icon:hover { color: var(--accent); border-color: var(--accent); }
   .btn-icon.del:hover { color: var(--exception); border-color: var(--exception); }
 
   .empty-state { text-align: center; padding: 60px 20px; color: var(--text-dim); }
-  .empty-state-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.4; }
-  .empty-state-text { font-size: 14px; }
+  .empty-state-icon { font-size: 38px; margin-bottom: 10px; opacity: 0.4; }
+  .empty-state-text { font-size: 14px; line-height: 1.6; }
 
-  /* ── SIDEBAR RIGHT ── */
-  .sidebar-right { border-left: 1px solid var(--border); padding: 24px 20px; display: flex; flex-direction: column; gap: 24px; overflow-y: auto; }
-
-  .stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
-  .stat-box-title { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; margin-bottom: 12px; }
-  .stat-big { font-family: 'Bebas Neue', sans-serif; font-size: 52px; line-height: 1; color: var(--accent); letter-spacing: 2px; }
-  .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
-
-  .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  /* SIDEBAR RIGHT */
+  .sidebar-right { border-left: 1px solid var(--border); padding: 22px 18px; display: flex; flex-direction: column; gap: 22px; overflow-y: auto; }
+  .stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; }
+  .stat-big { font-family: 'Bebas Neue', sans-serif; font-size: 48px; line-height: 1; color: var(--accent); letter-spacing: 2px; }
+  .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
   .stat-row:last-child { border-bottom: none; }
   .stat-row-val { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; }
-
-  .bar-chart { display: flex; align-items: flex-end; gap: 5px; height: 70px; margin-top: 8px; }
-  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end; }
+  .bar-chart { display: flex; align-items: flex-end; gap: 4px; height: 64px; margin-top: 8px; }
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; height: 100%; justify-content: flex-end; }
   .bar-fill { width: 100%; background: var(--accent); border-radius: 3px 3px 0 0; opacity: 0.8; min-height: 2px; transition: height 0.4s ease; }
   .bar-fill.today-bar { opacity: 1; }
   .bar-day { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-dim); }
-
-  .client-progress { margin-top: 4px; }
-  .cp-row { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+  .cp-row { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
   .cp-header { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); }
   .cp-bar-track { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
   .cp-bar-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
 
-  /* ══════════════════════════════════════════
-     ── DAILY ROUTINE PAGE ──
-  ══════════════════════════════════════════ */
-  .routine-layout {
-    display: grid;
-    grid-template-columns: 1fr 320px;
-    min-height: calc(100vh - 69px);
-    width: 100%;
+  /* ── MULTI-CLIENT SELECTOR ── */
+  .client-selector { display: flex; gap: 8px; flex-wrap: wrap; }
+  .client-toggle {
+    display: flex; align-items: center; gap: 6px;
+    padding: 7px 14px; border-radius: 20px;
+    border: 2px solid var(--border); background: var(--surface2);
+    cursor: pointer; font-size: 13px; font-weight: 600;
+    color: var(--text-muted); transition: all 0.15s;
+    user-select: none;
   }
+  .client-toggle:hover { border-color: #444; color: var(--text); }
+  .client-toggle .cdot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .client-toggle[data-client="AEO Agency"] .cdot { background: var(--aeo); }
+  .client-toggle[data-client="Flavors"] .cdot { background: var(--flavors); }
+  .client-toggle[data-client="Enjoy Hemp"] .cdot { background: var(--hemp); }
+  .client-toggle.selected[data-client="AEO Agency"] { border-color: var(--aeo); background: rgba(123,97,255,0.12); color: var(--aeo); }
+  .client-toggle.selected[data-client="Flavors"] { border-color: var(--flavors); background: rgba(255,107,53,0.12); color: var(--flavors); }
+  .client-toggle.selected[data-client="Enjoy Hemp"] { border-color: var(--hemp); background: rgba(74,222,128,0.12); color: var(--hemp); }
+  .client-toggle.selected { font-weight: 700; }
+  .client-required-hint { font-size: 11px; color: var(--exception); margin-top: 5px; display: none; }
+  .client-required-hint.show { display: block; }
 
-  .routine-main { padding: 28px 32px; overflow-y: auto; }
-
-  .routine-header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-bottom: 28px;
-  }
-
-  .routine-title-block {}
-  .routine-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; line-height: 1; color: var(--routine); }
+  /* ROUTINE PAGE */
+  .routine-layout { display: grid; grid-template-columns: 1fr 300px; min-height: calc(100vh - 65px); width: 100%; }
+  .routine-main { padding: 26px 28px; overflow-y: auto; }
+  .routine-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 26px; }
+  .routine-title { font-family: 'Bebas Neue', sans-serif; font-size: 34px; letter-spacing: 2px; line-height: 1; color: var(--routine); }
   .routine-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
-
-  /* Progress ring */
-  .routine-progress-ring {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .ring-wrap { position: relative; width: 72px; height: 72px; }
+  .ring-wrap { position: relative; width: 68px; height: 68px; }
   .ring-svg { transform: rotate(-90deg); }
   .ring-track { fill: none; stroke: var(--border); stroke-width: 6; }
   .ring-fill { fill: none; stroke: var(--routine); stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 0.5s ease; }
-  .ring-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--routine); letter-spacing: 1px; }
-  .ring-sub { font-size: 11px; color: var(--text-muted); }
-
-  /* Routine task cards */
+  .ring-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--routine); }
+  .ring-sub { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 4px; }
   .routine-list { display: flex; flex-direction: column; gap: 8px; }
-
-  .routine-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 14px 18px;
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 14px;
-    align-items: center;
-    transition: all 0.15s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .routine-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--routine); opacity: 0.5; }
+  .routine-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 13px 16px; display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; transition: all 0.15s; position: relative; overflow: hidden; }
+  .routine-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--routine); opacity: 0.4; }
   .routine-card.done-today { background: rgba(56,189,248,0.04); border-color: rgba(56,189,248,0.2); }
   .routine-card.done-today::before { opacity: 1; }
-  .routine-card:hover { border-color: rgba(56,189,248,0.3); }
-
-  .routine-check {
-    width: 20px; height: 20px; border-radius: 50%;
-    border: 2px solid var(--border); cursor: pointer; flex-shrink: 0;
-    transition: all 0.2s; display: flex; align-items: center; justify-content: center;
-    background: transparent;
-  }
+  .routine-check { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border); cursor: pointer; flex-shrink: 0; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
   .routine-check:hover { border-color: var(--routine); }
   .routine-check.checked { background: var(--routine); border-color: var(--routine); }
   .routine-check.checked::after { content: '✓'; color: #000; font-size: 11px; font-weight: 800; }
-
-  .routine-body {}
   .routine-task-title { font-size: 14px; font-weight: 500; color: var(--text); }
   .routine-task-title.done-title { text-decoration: line-through; color: var(--text-dim); }
-  .routine-task-desc { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
-  .routine-task-meta { display: flex; gap: 6px; margin-top: 6px; align-items: center; }
-
-  /* Streak heatmap */
-  .streak-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 3px;
-    margin-top: 8px;
-  }
-
-  .streak-cell {
-    aspect-ratio: 1;
-    border-radius: 2px;
-    background: var(--border);
-    transition: background 0.2s;
-    cursor: default;
-    position: relative;
-  }
-
+  .routine-task-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .routine-task-meta { display: flex; gap: 5px; margin-top: 6px; flex-wrap: wrap; }
+  .routine-sidebar { border-left: 1px solid var(--border); padding: 22px 18px; display: flex; flex-direction: column; gap: 22px; overflow-y: auto; }
+  .streak-num { font-family: 'Bebas Neue', sans-serif; font-size: 46px; color: var(--routine); line-height: 1; letter-spacing: 2px; }
+  .streak-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin-top: 8px; }
+  .streak-cell { aspect-ratio: 1; border-radius: 2px; background: var(--border); position: relative; cursor: default; }
   .streak-cell[data-pct="0"] { background: var(--border); }
   .streak-cell[data-pct="25"] { background: rgba(56,189,248,0.25); }
   .streak-cell[data-pct="50"] { background: rgba(56,189,248,0.45); }
   .streak-cell[data-pct="75"] { background: rgba(56,189,248,0.65); }
   .streak-cell[data-pct="100"] { background: var(--routine); }
+  .streak-cell:hover::after { content: attr(title); position: absolute; bottom: calc(100% + 4px); left: 50%; transform: translateX(-50%); background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-size: 10px; padding: 3px 7px; border-radius: 3px; white-space: nowrap; z-index: 10; }
 
-  .streak-cell:hover::after {
-    content: attr(title);
-    position: absolute;
-    bottom: calc(100% + 4px);
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-size: 10px;
-    padding: 3px 7px;
-    border-radius: 3px;
-    white-space: nowrap;
-    z-index: 10;
-  }
-
-  /* Routine sidebar */
-  .routine-sidebar {
-    border-left: 1px solid var(--border);
-    padding: 24px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-    overflow-y: auto;
-  }
-
-  .streak-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 48px;
-    color: var(--routine);
-    line-height: 1;
-    letter-spacing: 2px;
-  }
-
-  /* ── MODAL ── */
-  .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px);
-    z-index: 200; display: flex; align-items: center; justify-content: center;
-    opacity: 0; pointer-events: none; transition: opacity 0.2s;
-  }
+  /* MODAL */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.82); backdrop-filter: blur(4px); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
   .modal-overlay.open { opacity: 1; pointer-events: all; }
-
-  .modal {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
-    width: 520px; max-width: 95vw; padding: 28px;
-    transform: translateY(12px); transition: transform 0.2s;
-  }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; width: 500px; max-width: 95vw; padding: 26px; transform: translateY(12px); transition: transform 0.2s; max-height: 90vh; overflow-y: auto; }
   .modal-overlay.open .modal { transform: translateY(0); }
-
-  .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; color: var(--accent); margin-bottom: 22px; }
+  .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 2px; color: var(--accent); margin-bottom: 20px; }
   .modal-title.routine-modal-title { color: var(--routine); }
-
-  .form-group { margin-bottom: 16px; }
-  .form-label { display: block; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; margin-bottom: 6px; }
-  .form-input, .form-select, .form-textarea {
-    width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text);
-    font-family: 'DM Sans', sans-serif; font-size: 14px; padding: 9px 12px; border-radius: var(--radius); transition: border-color 0.15s;
-  }
+  .form-group { margin-bottom: 15px; }
+  .form-label { display: block; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; margin-bottom: 6px; }
+  .form-input, .form-select, .form-textarea { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; padding: 8px 11px; border-radius: var(--radius); transition: border-color 0.15s; }
   .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--accent); }
-  .form-textarea { resize: vertical; min-height: 80px; }
-  .form-select option { background: var(--surface2); }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-
-  .form-check-row {
-    display: flex; align-items: center; gap: 10px; margin-bottom: 18px; padding: 12px;
-    background: rgba(248,113,113,0.06); border: 1px solid rgba(248,113,113,0.2);
-    border-radius: var(--radius); cursor: pointer;
-  }
+  .form-textarea { resize: vertical; min-height: 72px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .form-check-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding: 11px; background: rgba(248,113,113,0.06); border: 1px solid rgba(248,113,113,0.2); border-radius: var(--radius); cursor: pointer; }
   .form-check-row input[type="checkbox"] { accent-color: var(--exception); width: 15px; height: 15px; }
   .form-check-row label { font-size: 13px; color: var(--exception); cursor: pointer; font-weight: 500; }
-
-  .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px; }
-
-  .btn-cancel {
-    background: transparent; border: 1px solid var(--border); color: var(--text-muted);
-    font-family: 'DM Sans', sans-serif; font-size: 13px; padding: 9px 18px;
-    border-radius: var(--radius); cursor: pointer; transition: all 0.15s;
-  }
+  .modal-footer { display: flex; justify-content: flex-end; gap: 9px; margin-top: 20px; }
+  .btn-cancel { background: transparent; border: 1px solid var(--border); color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-size: 13px; padding: 8px 16px; border-radius: var(--radius); cursor: pointer; transition: all 0.15s; }
   .btn-cancel:hover { border-color: var(--text-muted); color: var(--text); }
-
-  .btn-save {
-    background: var(--accent); border: none; color: #000; font-family: 'DM Sans', sans-serif;
-    font-weight: 700; font-size: 13px; padding: 9px 22px; border-radius: var(--radius); cursor: pointer; transition: all 0.15s;
-  }
-  .btn-save:hover { box-shadow: 0 4px 16px rgba(232,255,71,0.3); }
+  .btn-save { background: var(--accent); border: none; color: #000; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 13px; padding: 8px 20px; border-radius: var(--radius); cursor: pointer; }
+  .btn-save:hover { box-shadow: 0 4px 14px rgba(232,255,71,0.3); }
   .btn-save.routine-save { background: var(--routine); }
-  .btn-save.routine-save:hover { box-shadow: 0 4px 16px rgba(56,189,248,0.3); }
 
-  /* ── TOAST ── */
-  .toast {
-    position: fixed; bottom: 24px; right: 24px; background: var(--surface2); border: 1px solid var(--border);
-    border-left: 3px solid var(--accent); padding: 12px 18px; border-radius: var(--radius);
-    font-size: 13px; color: var(--text); z-index: 300; transform: translateY(80px); opacity: 0; transition: all 0.3s;
-  }
+  .toast { position: fixed; bottom: 22px; right: 22px; background: var(--surface2); border: 1px solid var(--border); border-left: 3px solid var(--accent); padding: 11px 16px; border-radius: var(--radius); font-size: 13px; color: var(--text); z-index: 300; transform: translateY(80px); opacity: 0; transition: all 0.3s; }
   .toast.show { transform: translateY(0); opacity: 1; }
-
-  ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
   .loading { text-align: center; padding: 40px; color: var(--text-dim); font-size: 13px; }
+  ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 </style>
 </head>
 <body>
@@ -439,44 +214,36 @@
   </div>
   <div class="header-right">
     <div class="page-tabs">
-      <button class="page-tab active" onclick="switchPage('tasks', this)">📋 Tasks</button>
-      <button class="page-tab routine-tab" onclick="switchPage('routine', this)">🔁 Daily Routine</button>
+      <button class="page-tab active" onclick="switchPage('tasks',this)">📋 Tasks</button>
+      <button class="page-tab routine-tab" onclick="switchPage('routine',this)">🔁 Daily Routine</button>
     </div>
     <span class="today-badge" id="headerDate">—</span>
     <button class="btn-add" id="mainAddBtn" onclick="openModal()">+ Add Task</button>
   </div>
 </header>
 
-<!-- ══════════════ TASKS PAGE ══════════════ -->
+<!-- ═══════════ TASKS PAGE ═══════════ -->
 <div class="page active" id="page-tasks">
   <div class="main-layout">
     <aside class="sidebar-left">
       <div>
         <div class="sidebar-section-title">Views</div>
-        <div class="nav-item active" data-view="today" onclick="setView('today', this)">
-          📅 Today <span class="nav-count" id="nav-today">0</span>
-        </div>
-        <div class="nav-item" data-view="all" onclick="setView('all', this)">
-          🗂 All Tasks <span class="nav-count" id="nav-all">0</span>
-        </div>
-        <div class="nav-item" data-view="exceptions" onclick="setView('exceptions', this)">
-          ⚡ Exceptions <span class="nav-count" id="nav-exceptions">0</span>
-        </div>
-        <div class="nav-item" data-view="done" onclick="setView('done', this)">
-          ✅ Completed <span class="nav-count" id="nav-done">0</span>
-        </div>
+        <div class="nav-item active" onclick="setView('today',this)">📅 Today <span class="nav-count" id="nav-today">0</span></div>
+        <div class="nav-item" onclick="setView('all',this)">🗂 All Tasks <span class="nav-count" id="nav-all">0</span></div>
+        <div class="nav-item" onclick="setView('exceptions',this)">⚡ Exceptions <span class="nav-count" id="nav-exceptions">0</span></div>
+        <div class="nav-item" onclick="setView('done',this)">✅ Completed <span class="nav-count" id="nav-done">0</span></div>
       </div>
       <div>
         <div class="sidebar-section-title">Clients</div>
-        <div class="nav-item" data-view="client-AEO Agency" onclick="setView('client-AEO Agency', this)">
+        <div class="nav-item" onclick="setView('client-AEO Agency',this)">
           <span><span class="client-dot" style="background:var(--aeo)"></span>AEO Agency</span>
           <span class="nav-count" id="nav-aeo">0</span>
         </div>
-        <div class="nav-item" data-view="client-Flavors" onclick="setView('client-Flavors', this)">
+        <div class="nav-item" onclick="setView('client-Flavors',this)">
           <span><span class="client-dot" style="background:var(--flavors)"></span>Flavors</span>
           <span class="nav-count" id="nav-flavors">0</span>
         </div>
-        <div class="nav-item" data-view="client-Enjoy Hemp" onclick="setView('client-Enjoy Hemp', this)">
+        <div class="nav-item" onclick="setView('client-Enjoy Hemp',this)">
           <span><span class="client-dot" style="background:var(--hemp)"></span>Enjoy Hemp</span>
           <span class="nav-count" id="nav-hemp">0</span>
         </div>
@@ -489,11 +256,11 @@
         <input type="date" class="date-input" id="datePicker" onchange="filterByDate(this.value)" />
       </div>
       <div class="filter-bar">
-        <span class="filter-pill active" data-status="all" onclick="setStatusFilter('all', this)">All</span>
-        <span class="filter-pill" data-status="pending" onclick="setStatusFilter('pending', this)">Pending</span>
-        <span class="filter-pill" data-status="done" onclick="setStatusFilter('done', this)">Done</span>
+        <span class="filter-pill active" onclick="setStatusFilter('all',this)">All</span>
+        <span class="filter-pill" onclick="setStatusFilter('pending',this)">Pending</span>
+        <span class="filter-pill" onclick="setStatusFilter('done',this)">Done</span>
       </div>
-      <div class="task-list" id="taskList"><div class="loading">Loading tasks…</div></div>
+      <div class="task-list" id="taskList"><div class="loading">Loading…</div></div>
     </main>
 
     <aside class="sidebar-right">
@@ -502,7 +269,7 @@
         <div class="stat-box">
           <div class="stat-big" id="statTodayTotal">0</div>
           <div class="stat-label">Tasks today</div>
-          <div style="margin-top:14px">
+          <div style="margin-top:12px">
             <div class="stat-row"><span>✅ Done</span><span class="stat-row-val" style="color:var(--done)" id="statTodayDone">0</span></div>
             <div class="stat-row"><span>⏳ Pending</span><span class="stat-row-val" style="color:var(--pending)" id="statTodayPending">0</span></div>
             <div class="stat-row"><span>⚡ Exceptions</span><span class="stat-row-val" style="color:var(--exception)" id="statTodayEx">0</span></div>
@@ -511,80 +278,73 @@
       </div>
       <div>
         <div class="sidebar-section-title">Last 7 Days</div>
-        <div class="stat-box"><div class="bar-chart" id="barChart">—</div></div>
+        <div class="stat-box"><div class="bar-chart" id="barChart"></div></div>
       </div>
       <div>
         <div class="sidebar-section-title">Client Breakdown</div>
-        <div class="stat-box"><div class="client-progress" id="clientProgress">—</div></div>
+        <div class="stat-box" id="clientProgress"></div>
       </div>
       <div>
         <div class="sidebar-section-title">All Time</div>
         <div class="stat-box">
-          <div class="stat-row"><span>Total tasks</span><span class="stat-row-val" id="statAllTotal">0</span></div>
-          <div class="stat-row"><span>Completed</span><span class="stat-row-val" style="color:var(--done)" id="statAllDone">0</span></div>
-          <div class="stat-row"><span>Exceptions logged</span><span class="stat-row-val" style="color:var(--exception)" id="statAllEx">0</span></div>
+          <div class="stat-row"><span>Total</span><span class="stat-row-val" id="statAllTotal">0</span></div>
+          <div class="stat-row"><span>Done</span><span class="stat-row-val" style="color:var(--done)" id="statAllDone">0</span></div>
+          <div class="stat-row"><span>Exceptions</span><span class="stat-row-val" style="color:var(--exception)" id="statAllEx">0</span></div>
         </div>
       </div>
     </aside>
   </div>
 </div>
 
-<!-- ══════════════ DAILY ROUTINE PAGE ══════════════ -->
+<!-- ═══════════ ROUTINE PAGE ═══════════ -->
 <div class="page" id="page-routine">
   <div class="routine-layout">
-
     <main class="routine-main">
       <div class="routine-header">
-        <div class="routine-title-block">
+        <div>
           <div class="routine-title">DAILY ROUTINE</div>
-          <div class="routine-subtitle" id="routineSubtitle">Tasks you do every single day</div>
+          <div class="routine-subtitle">Tasks you do every single day</div>
         </div>
-        <div class="routine-progress-ring">
+        <div style="display:flex;flex-direction:column;align-items:center">
           <div class="ring-wrap">
-            <svg class="ring-svg" viewBox="0 0 72 72" width="72" height="72">
-              <circle class="ring-track" cx="36" cy="36" r="30"/>
-              <circle class="ring-fill" id="ringFill" cx="36" cy="36" r="30" stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+            <svg class="ring-svg" viewBox="0 0 68 68" width="68" height="68">
+              <circle class="ring-track" cx="34" cy="34" r="28"/>
+              <circle class="ring-fill" id="ringFill" cx="34" cy="34" r="28" stroke-dasharray="175.9" stroke-dashoffset="175.9"/>
             </svg>
             <div class="ring-label" id="ringLabel">0%</div>
           </div>
-          <div class="ring-sub" id="ringSubLabel">0 / 0 done today</div>
+          <div class="ring-sub" id="ringSubLabel">0 / 0 today</div>
         </div>
       </div>
-
-      <div class="routine-list" id="routineList">
-        <div class="loading">Loading routine…</div>
-      </div>
+      <div class="routine-list" id="routineList"><div class="loading">Loading…</div></div>
     </main>
-
     <aside class="routine-sidebar">
       <div>
-        <div class="sidebar-section-title">Today's Progress</div>
+        <div class="sidebar-section-title">Today</div>
         <div class="stat-box">
           <div class="streak-num" id="routineDoneCount">0</div>
-          <div class="stat-label">completed today</div>
-          <div style="margin-top:14px">
+          <div class="stat-label">completed</div>
+          <div style="margin-top:12px">
             <div class="stat-row"><span>Total routines</span><span class="stat-row-val" id="routineTotalCount">0</span></div>
             <div class="stat-row"><span>Remaining</span><span class="stat-row-val" style="color:var(--pending)" id="routineRemainingCount">0</span></div>
           </div>
         </div>
       </div>
-
       <div>
         <div class="sidebar-section-title">28-Day Completion</div>
         <div class="stat-box">
-          <div class="streak-grid" id="streakGrid">—</div>
-          <div style="display:flex;justify-content:space-between;margin-top:8px;">
+          <div class="streak-grid" id="streakGrid"></div>
+          <div style="display:flex;justify-content:space-between;margin-top:6px">
             <span style="font-size:10px;color:var(--text-dim)">4 wks ago</span>
             <span style="font-size:10px;color:var(--text-dim)">today</span>
           </div>
         </div>
       </div>
-
       <div>
-        <div class="sidebar-section-title">Completion Rate</div>
+        <div class="sidebar-section-title">7-Day Avg</div>
         <div class="stat-box">
           <div class="streak-num" id="routineAvgRate" style="font-size:36px">—</div>
-          <div class="stat-label">avg last 7 days</div>
+          <div class="stat-label">completion rate</div>
         </div>
       </div>
     </aside>
@@ -603,14 +363,24 @@
       <label class="form-label">Description</label>
       <textarea class="form-textarea" id="fDesc" placeholder="Details, notes, links…"></textarea>
     </div>
+
+    <!-- MULTI-CLIENT SELECTOR -->
     <div class="form-group">
-      <label class="form-label">Client</label>
-      <select class="form-select" id="fClient">
-        <option value="AEO Agency">AEO Agency</option>
-        <option value="Flavors">Flavors</option>
-        <option value="Enjoy Hemp">Enjoy Hemp</option>
-      </select>
+      <label class="form-label">Client(s) — select one or more *</label>
+      <div class="client-selector">
+        <div class="client-toggle" data-client="AEO Agency" onclick="toggleClient(this)">
+          <span class="cdot"></span> AEO Agency
+        </div>
+        <div class="client-toggle" data-client="Flavors" onclick="toggleClient(this)">
+          <span class="cdot"></span> Flavors
+        </div>
+        <div class="client-toggle" data-client="Enjoy Hemp" onclick="toggleClient(this)">
+          <span class="cdot"></span> Enjoy Hemp
+        </div>
+      </div>
+      <div class="client-required-hint" id="clientHint">Please select at least one client</div>
     </div>
+
     <div class="form-row">
       <div class="form-group">
         <label class="form-label">Priority</label>
@@ -650,19 +420,26 @@
     <div class="modal-title routine-modal-title" id="routineModalTitle">ADD ROUTINE TASK</div>
     <div class="form-group">
       <label class="form-label">Task Title *</label>
-      <input class="form-input" id="rfTitle" placeholder="e.g. Check client dashboards, Post on LinkedIn…" />
+      <input class="form-input" id="rfTitle" placeholder="e.g. Check client dashboards…" />
     </div>
     <div class="form-group">
       <label class="form-label">Description</label>
-      <textarea class="form-textarea" id="rfDesc" placeholder="Brief note about this routine…" style="min-height:60px"></textarea>
+      <textarea class="form-textarea" id="rfDesc" placeholder="Brief note…" style="min-height:60px"></textarea>
     </div>
     <div class="form-group">
-      <label class="form-label">Client</label>
-      <select class="form-select" id="rfClient">
-        <option value="AEO Agency">AEO Agency</option>
-        <option value="Flavors">Flavors</option>
-        <option value="Enjoy Hemp">Enjoy Hemp</option>
-      </select>
+      <label class="form-label">Client(s) — select one or more *</label>
+      <div class="client-selector">
+        <div class="client-toggle" data-client="AEO Agency" onclick="toggleRClient(this)">
+          <span class="cdot"></span> AEO Agency
+        </div>
+        <div class="client-toggle" data-client="Flavors" onclick="toggleRClient(this)">
+          <span class="cdot"></span> Flavors
+        </div>
+        <div class="client-toggle" data-client="Enjoy Hemp" onclick="toggleRClient(this)">
+          <span class="cdot"></span> Enjoy Hemp
+        </div>
+      </div>
+      <div class="client-required-hint" id="rclientHint">Please select at least one client</div>
     </div>
     <div class="form-group">
       <label class="form-label">Priority</label>
@@ -683,14 +460,14 @@
 
 <script>
   const API = '';
-  let allTasks = [];
-  let allRoutines = [];
-  let currentView = 'today';
-  let currentStatusFilter = 'all';
-  let editingId = null;
-  let editingRoutineId = null;
-  let currentPage = 'tasks';
+  const CLIENTS = ['AEO Agency', 'Flavors', 'Enjoy Hemp'];
+  const CLIENT_TAGS = { 'AEO Agency': 'tag-aeo', 'Flavors': 'tag-flavors', 'Enjoy Hemp': 'tag-hemp' };
 
+  let allTasks = [], allRoutines = [];
+  let currentView = 'today', currentStatusFilter = 'all';
+  let editingId = null, editingRoutineId = null;
+
+  // ── Init ──
   document.getElementById('headerDate').textContent = new Date().toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long' });
   document.getElementById('datePicker').value = todayStr();
   document.getElementById('fDate').value = todayStr();
@@ -698,41 +475,51 @@
   function todayStr() { return new Date().toISOString().split('T')[0]; }
 
   async function init() {
-    await loadTasks();
-    await loadStats();
-    await loadRoutine();
+    await Promise.all([loadTasks(), loadStats(), loadRoutine()]);
   }
 
-  // ── PAGE SWITCHING ──
+  // ── Page switch ──
   function switchPage(page, btn) {
-    currentPage = page;
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.page-tab').forEach(b => b.classList.remove('active'));
     document.getElementById('page-' + page).classList.add('active');
     btn.classList.add('active');
-
-    const addBtn = document.getElementById('mainAddBtn');
+    const ab = document.getElementById('mainAddBtn');
     if (page === 'routine') {
-      addBtn.textContent = '+ Add Routine';
-      addBtn.className = 'btn-add routine-btn';
-      addBtn.onclick = openRoutineModal;
+      ab.textContent = '+ Add Routine'; ab.className = 'btn-add routine-btn'; ab.onclick = openRoutineModal;
     } else {
-      addBtn.textContent = '+ Add Task';
-      addBtn.className = 'btn-add';
-      addBtn.onclick = openModal;
+      ab.textContent = '+ Add Task'; ab.className = 'btn-add'; ab.onclick = openModal;
     }
   }
 
-  // ── TASKS ──
+  // ── Multi-client toggle ──
+  function toggleClient(el) {
+    el.classList.toggle('selected');
+    document.getElementById('clientHint').classList.remove('show');
+  }
+  function toggleRClient(el) {
+    el.classList.toggle('selected');
+    document.getElementById('rclientHint').classList.remove('show');
+  }
+  function getSelectedClients(selector) {
+    return [...document.querySelectorAll(`${selector} .client-toggle.selected`)].map(el => el.dataset.client);
+  }
+  function setSelectedClients(selector, clients) {
+    document.querySelectorAll(`${selector} .client-toggle`).forEach(el => {
+      el.classList.toggle('selected', clients.includes(el.dataset.client));
+    });
+  }
+
+  // ── Tasks ──
   async function loadTasks() {
-    const res = await fetch(`${API}/api/tasks`);
+    const res = await fetch('/api/tasks');
     allTasks = await res.json();
     updateNavCounts();
     renderTasks();
   }
 
   async function loadStats() {
-    const res = await fetch(`${API}/api/stats`);
+    const res = await fetch('/api/stats');
     const s = await res.json();
     document.getElementById('statTodayTotal').textContent = s.today.total;
     document.getElementById('statTodayDone').textContent = s.today.done;
@@ -743,18 +530,18 @@
     document.getElementById('statAllEx').textContent = s.allTime.exceptions;
 
     const max = Math.max(...s.last7Days.map(d => d.total), 1);
-    document.getElementById('barChart').innerHTML = s.last7Days.map((d) => {
-      const h = Math.round((d.total / max) * 62);
+    document.getElementById('barChart').innerHTML = s.last7Days.map(d => {
+      const h = Math.round((d.total / max) * 56);
       const isToday = d.date === todayStr();
-      const label = new Date(d.date + 'T00:00:00').toLocaleDateString('en', {weekday:'narrow'});
-      return `<div class="bar-col"><div class="bar-fill${isToday?' today-bar':''}" style="height:${h}px" title="${d.total} tasks on ${d.date}"></div><div class="bar-day">${label}</div></div>`;
+      const label = new Date(d.date + 'T12:00:00').toLocaleDateString('en', {weekday:'narrow'});
+      return `<div class="bar-col"><div class="bar-fill${isToday?' today-bar':''}" style="height:${h}px" title="${d.total} tasks"></div><div class="bar-day">${label}</div></div>`;
     }).join('');
 
-    const clients = [{ name:'AEO Agency', color:'var(--aeo)' }, { name:'Flavors', color:'var(--flavors)' }, { name:'Enjoy Hemp', color:'var(--hemp)' }];
-    document.getElementById('clientProgress').innerHTML = clients.map(c => {
-      const stat = s.clientStats[c.name] || { total:0, done:0 };
-      const pct = stat.total ? Math.round((stat.done/stat.total)*100) : 0;
-      return `<div class="cp-row"><div class="cp-header"><span>${c.name}</span><span style="color:var(--text-dim)">${stat.done}/${stat.total}</span></div><div class="cp-bar-track"><div class="cp-bar-fill" style="width:${pct}%;background:${c.color}"></div></div></div>`;
+    document.getElementById('clientProgress').innerHTML = CLIENTS.map(c => {
+      const cs = s.clientStats[c] || {total:0, done:0};
+      const pct = cs.total ? Math.round(cs.done/cs.total*100) : 0;
+      const colors = {'AEO Agency':'var(--aeo)','Flavors':'var(--flavors)','Enjoy Hemp':'var(--hemp)'};
+      return `<div class="cp-row"><div class="cp-header"><span>${c}</span><span style="color:var(--text-dim)">${cs.done}/${cs.total}</span></div><div class="cp-bar-track"><div class="cp-bar-fill" style="width:${pct}%;background:${colors[c]}"></div></div></div>`;
     }).join('');
   }
 
@@ -764,25 +551,25 @@
     document.getElementById('nav-all').textContent = allTasks.length;
     document.getElementById('nav-exceptions').textContent = allTasks.filter(t => t.isException).length;
     document.getElementById('nav-done').textContent = allTasks.filter(t => t.status === 'done').length;
-    document.getElementById('nav-aeo').textContent = allTasks.filter(t => t.client === 'AEO Agency').length;
-    document.getElementById('nav-flavors').textContent = allTasks.filter(t => t.client === 'Flavors').length;
-    document.getElementById('nav-hemp').textContent = allTasks.filter(t => t.client === 'Enjoy Hemp').length;
+    document.getElementById('nav-aeo').textContent = allTasks.filter(t => (t.clients||[]).includes('AEO Agency')).length;
+    document.getElementById('nav-flavors').textContent = allTasks.filter(t => (t.clients||[]).includes('Flavors')).length;
+    document.getElementById('nav-hemp').textContent = allTasks.filter(t => (t.clients||[]).includes('Enjoy Hemp')).length;
   }
 
   function getFilteredTasks() {
     let tasks = [...allTasks];
     const today = todayStr();
-    const pickerDate = document.getElementById('datePicker').value;
     if (currentView === 'today') tasks = tasks.filter(t => t.date === today);
     else if (currentView === 'exceptions') tasks = tasks.filter(t => t.isException);
     else if (currentView === 'done') tasks = tasks.filter(t => t.status === 'done');
-    else if (currentView.startsWith('client-')) tasks = tasks.filter(t => t.client === currentView.replace('client-',''));
-    else if (currentView === 'date') tasks = tasks.filter(t => t.date === pickerDate);
+    else if (currentView.startsWith('client-')) {
+      const c = currentView.replace('client-','');
+      tasks = tasks.filter(t => (t.clients||[]).includes(c));
+    } else if (currentView === 'date') {
+      tasks = tasks.filter(t => t.date === document.getElementById('datePicker').value);
+    }
     if (currentStatusFilter !== 'all') tasks = tasks.filter(t => t.status === currentStatusFilter);
-    return tasks.sort((a,b) => {
-      const po = { high:0, medium:1, low:2 };
-      return (po[a.priority]||1)-(po[b.priority]||1) || new Date(b.createdAt)-new Date(a.createdAt);
-    });
+    return tasks.sort((a,b) => { const po={high:0,medium:1,low:2}; return (po[a.priority]||1)-(po[b.priority]||1) || new Date(b.createdAt)-new Date(a.createdAt); });
   }
 
   function renderTasks() {
@@ -792,67 +579,75 @@
       list.innerHTML = `<div class="empty-state"><div class="empty-state-icon">📋</div><div class="empty-state-text">No tasks here yet.<br/>Hit <strong>+ Add Task</strong> to start.</div></div>`;
       return;
     }
-    const clientClass = { 'AEO Agency':'tag-client-aeo','Flavors':'tag-client-flavors','Enjoy Hemp':'tag-client-hemp' };
-    list.innerHTML = tasks.map(t => `
-      <div class="task-card${t.isException?' exception-card':''}" data-client="${t.client}">
+    list.innerHTML = tasks.map(t => {
+      const clients = t.clients || [t.client || 'AEO Agency'];
+      const primary = clients[0];
+      const clientTags = clients.map(c => `<span class="tag ${CLIENT_TAGS[c]||'tag-aeo'}">${c}</span>`).join('');
+      return `<div class="task-card${t.isException?' exception-card':''}" data-primary="${esc(primary)}">
         <div class="task-check${t.status==='done'?' checked':''}" onclick="toggleDone('${t.id}')"></div>
         <div class="task-body">
-          <div class="task-title${t.status==='done'?' done-title':''}">${escHtml(t.title)}</div>
-          ${t.description?`<div class="task-desc">${escHtml(t.description)}</div>`:''}
+          <div class="task-title${t.status==='done'?' done-title':''}">${esc(t.title)}</div>
+          ${t.description?`<div class="task-desc">${esc(t.description)}</div>`:''}
           <div class="task-meta">
-            <span class="tag ${clientClass[t.client]||'tag-client-aeo'}">${t.client}</span>
+            ${clientTags}
             ${t.isException?`<span class="tag tag-exception">⚡ Exception</span>`:''}
-            <span class="priority-dot p-${t.priority}" title="Priority: ${t.priority}"></span>
+            <span class="priority-dot p-${t.priority}" title="${t.priority}"></span>
             <span style="font-size:11px;color:var(--text-dim)">${t.date}</span>
           </div>
         </div>
         <div class="task-actions">
-          <button class="btn-icon" onclick="openEditModal('${t.id}')" title="Edit">✏️</button>
-          <button class="btn-icon del" onclick="deleteTask('${t.id}')" title="Delete">🗑</button>
+          <button class="btn-icon" onclick="openEditModal('${t.id}')">✏️</button>
+          <button class="btn-icon del" onclick="deleteTask('${t.id}')">🗑</button>
         </div>
-      </div>`).join('');
+      </div>`;
+    }).join('');
   }
 
-  function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
   async function saveTask() {
     const title = document.getElementById('fTitle').value.trim();
-    if (!title) { showToast('Task title is required!'); return; }
+    if (!title) { showToast('Title is required!'); return; }
+    const clients = getSelectedClients('#modalOverlay .client-selector');
+    if (!clients.length) { document.getElementById('clientHint').classList.add('show'); return; }
+
     const payload = {
       title, description: document.getElementById('fDesc').value.trim(),
-      client: document.getElementById('fClient').value,
-      priority: document.getElementById('fPriority').value, status: document.getElementById('fStatus').value,
+      clients, priority: document.getElementById('fPriority').value,
+      status: document.getElementById('fStatus').value,
       isException: document.getElementById('fException').checked,
       date: document.getElementById('fDate').value || todayStr(),
     };
+
     if (editingId) {
-      await fetch(`${API}/api/tasks/${editingId}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+      await fetch(`/api/tasks/${editingId}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
       showToast('Task updated ✓');
     } else {
-      await fetch(`${API}/api/tasks`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+      await fetch('/api/tasks', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
       showToast('Task added ✓');
     }
-    closeModal(); await loadTasks(); await loadStats();
+    closeModal();
+    await loadTasks(); await loadStats();
   }
 
   async function toggleDone(id) {
     const task = allTasks.find(t => t.id === id);
     if (!task) return;
-    await fetch(`${API}/api/tasks/${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ status: task.status==='done'?'pending':'done' }) });
+    await fetch(`/api/tasks/${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ status: task.status==='done'?'pending':'done' }) });
     await loadTasks(); await loadStats();
   }
 
   async function deleteTask(id) {
     if (!confirm('Delete this task?')) return;
-    await fetch(`${API}/api/tasks/${id}`, { method:'DELETE' });
-    showToast('Task deleted'); await loadTasks(); await loadStats();
+    await fetch(`/api/tasks/${id}`, { method:'DELETE' });
+    showToast('Deleted'); await loadTasks(); await loadStats();
   }
 
   function setView(view, el) {
     currentView = view;
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     el.classList.add('active');
-    const titles = { today:"TODAY'S TASKS", all:"ALL TASKS", exceptions:"EXCEPTIONS", done:"COMPLETED TASKS", 'client-AEO Agency':"AEO AGENCY", 'client-Flavors':"FLAVORS", 'client-Enjoy Hemp':"ENJOY HEMP" };
+    const titles = { today:"TODAY'S TASKS", all:"ALL TASKS", exceptions:"EXCEPTIONS", done:"COMPLETED", 'client-AEO Agency':"AEO AGENCY", 'client-Flavors':"FLAVORS", 'client-Enjoy Hemp':"ENJOY HEMP" };
     document.getElementById('mainTitle').textContent = titles[view] || view.toUpperCase();
     renderTasks();
   }
@@ -876,12 +671,14 @@
     document.getElementById('modalTitle').textContent = 'ADD TASK';
     document.getElementById('fTitle').value = '';
     document.getElementById('fDesc').value = '';
-    document.getElementById('fClient').value = 'AEO Agency';
     document.getElementById('fPriority').value = 'medium';
     document.getElementById('fStatus').value = 'pending';
     document.getElementById('fException').checked = false;
     document.getElementById('fDate').value = todayStr();
+    document.getElementById('clientHint').classList.remove('show');
+    setSelectedClients('#modalOverlay .client-selector', []);
     document.getElementById('modalOverlay').classList.add('open');
+    setTimeout(() => document.getElementById('fTitle').focus(), 200);
   }
 
   function openEditModal(id) {
@@ -891,103 +688,87 @@
     document.getElementById('modalTitle').textContent = 'EDIT TASK';
     document.getElementById('fTitle').value = task.title;
     document.getElementById('fDesc').value = task.description || '';
-    document.getElementById('fClient').value = task.client;
     document.getElementById('fPriority').value = task.priority;
     document.getElementById('fStatus').value = task.status;
     document.getElementById('fException').checked = task.isException;
     document.getElementById('fDate').value = task.date;
+    document.getElementById('clientHint').classList.remove('show');
+    setSelectedClients('#modalOverlay .client-selector', task.clients || [task.client]);
     document.getElementById('modalOverlay').classList.add('open');
   }
 
   function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); editingId = null; }
 
-  // ══════════════ ROUTINE LOGIC ══════════════
-
+  // ── Routine ──
   async function loadRoutine() {
-    const [tasksRes, histRes] = await Promise.all([
-      fetch(`${API}/api/permanent-tasks`),
-      fetch(`${API}/api/permanent-tasks/history`)
-    ]);
-    allRoutines = await tasksRes.json();
-    const history = await histRes.json();
+    const [tr, hr] = await Promise.all([fetch('/api/permanent-tasks'), fetch('/api/permanent-tasks/history')]);
+    allRoutines = await tr.json();
+    const history = await hr.json();
     renderRoutine();
     renderRoutineStats(history);
   }
 
   function renderRoutine() {
-    const list = document.getElementById('routineList');
     const total = allRoutines.length;
     const done = allRoutines.filter(r => r.doneToday).length;
-
-    // Update ring
-    const circ = 188.5;
+    const circ = 175.9;
     const pct = total ? done / total : 0;
-    document.getElementById('ringFill').style.strokeDashoffset = circ - (circ * pct);
-    document.getElementById('ringLabel').textContent = total ? Math.round(pct * 100) + '%' : '—';
-    document.getElementById('ringSubLabel').textContent = `${done} / ${total} done today`;
+    document.getElementById('ringFill').style.strokeDashoffset = circ - circ * pct;
+    document.getElementById('ringLabel').textContent = total ? Math.round(pct*100)+'%' : '—';
+    document.getElementById('ringSubLabel').textContent = `${done} / ${total} today`;
     document.getElementById('routineDoneCount').textContent = done;
     document.getElementById('routineTotalCount').textContent = total;
     document.getElementById('routineRemainingCount').textContent = total - done;
 
+    const list = document.getElementById('routineList');
     if (!total) {
-      list.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔁</div><div class="empty-state-text">No routine tasks yet.<br/>Add tasks you do <strong>every single day</strong>.</div></div>`;
+      list.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔁</div><div class="empty-state-text">No routine tasks yet.<br/>Add tasks you do <strong>every day</strong>.</div></div>`;
       return;
     }
-
-    const clientClass = { 'AEO Agency':'tag-client-aeo','Flavors':'tag-client-flavors','Enjoy Hemp':'tag-client-hemp' };
     const sorted = [...allRoutines].sort((a,b) => {
       if (a.doneToday && !b.doneToday) return 1;
       if (!a.doneToday && b.doneToday) return -1;
-      const po = { high:0, medium:1, low:2 };
-      return (po[a.priority]||1) - (po[b.priority]||1);
+      return ({high:0,medium:1,low:2}[a.priority]||1) - ({high:0,medium:1,low:2}[b.priority]||1);
     });
-
-    list.innerHTML = sorted.map(r => `
-      <div class="routine-card${r.doneToday?' done-today':''}">
+    list.innerHTML = sorted.map(r => {
+      const clients = r.clients || [r.client || 'AEO Agency'];
+      const clientTags = clients.map(c => `<span class="tag ${CLIENT_TAGS[c]||'tag-aeo'}">${c}</span>`).join('');
+      return `<div class="routine-card${r.doneToday?' done-today':''}">
         <div class="routine-check${r.doneToday?' checked':''}" onclick="toggleRoutine('${r.id}')"></div>
-        <div class="routine-body">
-          <div class="routine-task-title${r.doneToday?' done-title':''}">${escHtml(r.title)}</div>
-          ${r.description?`<div class="routine-task-desc">${escHtml(r.description)}</div>`:''}
-          <div class="routine-task-meta">
-            <span class="tag ${clientClass[r.client]||'tag-client-aeo'}">${r.client}</span>
-            <span class="tag tag-routine">🔁 Daily</span>
-            <span class="priority-dot p-${r.priority}" title="Priority: ${r.priority}"></span>
-          </div>
+        <div>
+          <div class="routine-task-title${r.doneToday?' done-title':''}">${esc(r.title)}</div>
+          ${r.description?`<div class="routine-task-desc">${esc(r.description)}</div>`:''}
+          <div class="routine-task-meta">${clientTags}<span class="tag tag-routine">🔁 Daily</span><span class="priority-dot p-${r.priority}"></span></div>
         </div>
         <div class="task-actions">
-          <button class="btn-icon" onclick="openEditRoutineModal('${r.id}')" title="Edit">✏️</button>
-          <button class="btn-icon del" onclick="deleteRoutine('${r.id}')" title="Delete">🗑</button>
+          <button class="btn-icon" onclick="openEditRoutineModal('${r.id}')">✏️</button>
+          <button class="btn-icon del" onclick="deleteRoutine('${r.id}')">🗑</button>
         </div>
-      </div>`).join('');
+      </div>`;
+    }).join('');
   }
 
   function renderRoutineStats(history) {
-    // Streak grid (last 28 days)
     const last28 = history.slice(-28);
-    const grid = document.getElementById('streakGrid');
-    grid.innerHTML = last28.map(d => {
-      const pct = d.total ? Math.round((d.done / d.total) * 100) : 0;
-      const bucket = pct === 0 ? 0 : pct <= 25 ? 25 : pct <= 50 ? 50 : pct <= 75 ? 75 : 100;
-      const label = new Date(d.date + 'T00:00:00').toLocaleDateString('en-IN', { day:'numeric', month:'short' });
-      return `<div class="streak-cell" data-pct="${bucket}" title="${label}: ${d.done}/${d.total}"></div>`;
+    document.getElementById('streakGrid').innerHTML = last28.map(d => {
+      const pct = d.total ? Math.round(d.done/d.total*100) : 0;
+      const b = pct===0?0:pct<=25?25:pct<=50?50:pct<=75?75:100;
+      const label = new Date(d.date+'T12:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+      return `<div class="streak-cell" data-pct="${b}" title="${label}: ${d.done}/${d.total}"></div>`;
     }).join('');
-
-    // Avg last 7 days
-    const last7 = history.slice(-7);
-    const rates = last7.filter(d => d.total > 0).map(d => d.done / d.total * 100);
-    const avg = rates.length ? Math.round(rates.reduce((a,b)=>a+b,0)/rates.length) : 0;
-    document.getElementById('routineAvgRate').textContent = avg + '%';
+    const rates = history.slice(-7).filter(d=>d.total>0).map(d=>d.done/d.total*100);
+    document.getElementById('routineAvgRate').textContent = rates.length ? Math.round(rates.reduce((a,b)=>a+b,0)/rates.length)+'%' : '—';
   }
 
   async function toggleRoutine(id) {
-    await fetch(`${API}/api/permanent-tasks/${id}/toggle`, { method:'POST' });
+    await fetch(`/api/permanent-tasks/${id}/toggle`, { method:'POST' });
     await loadRoutine();
   }
 
   async function deleteRoutine(id) {
-    if (!confirm('Remove this routine task? This will delete it permanently.')) return;
-    await fetch(`${API}/api/permanent-tasks/${id}`, { method:'DELETE' });
-    showToast('Routine task removed'); await loadRoutine();
+    if (!confirm('Remove this routine permanently?')) return;
+    await fetch(`/api/permanent-tasks/${id}`, { method:'DELETE' });
+    showToast('Routine removed'); await loadRoutine();
   }
 
   function openRoutineModal() {
@@ -995,9 +776,11 @@
     document.getElementById('routineModalTitle').textContent = 'ADD ROUTINE TASK';
     document.getElementById('rfTitle').value = '';
     document.getElementById('rfDesc').value = '';
-    document.getElementById('rfClient').value = 'AEO Agency';
     document.getElementById('rfPriority').value = 'medium';
+    document.getElementById('rclientHint').classList.remove('show');
+    setSelectedClients('#routineModalOverlay .client-selector', []);
     document.getElementById('routineModalOverlay').classList.add('open');
+    setTimeout(() => document.getElementById('rfTitle').focus(), 200);
   }
 
   function openEditRoutineModal(id) {
@@ -1007,8 +790,9 @@
     document.getElementById('routineModalTitle').textContent = 'EDIT ROUTINE TASK';
     document.getElementById('rfTitle').value = r.title;
     document.getElementById('rfDesc').value = r.description || '';
-    document.getElementById('rfClient').value = r.client;
     document.getElementById('rfPriority').value = r.priority;
+    document.getElementById('rclientHint').classList.remove('show');
+    setSelectedClients('#routineModalOverlay .client-selector', r.clients || [r.client]);
     document.getElementById('routineModalOverlay').classList.add('open');
   }
 
@@ -1017,24 +801,22 @@
   async function saveRoutineTask() {
     const title = document.getElementById('rfTitle').value.trim();
     if (!title) { showToast('Title is required!'); return; }
-    const payload = {
-      title, description: document.getElementById('rfDesc').value.trim(),
-      client: document.getElementById('rfClient').value,
-      priority: document.getElementById('rfPriority').value,
-    };
+    const clients = getSelectedClients('#routineModalOverlay .client-selector');
+    if (!clients.length) { document.getElementById('rclientHint').classList.add('show'); return; }
+
+    const payload = { title, description: document.getElementById('rfDesc').value.trim(), clients, priority: document.getElementById('rfPriority').value };
     if (editingRoutineId) {
-      await fetch(`${API}/api/permanent-tasks/${editingRoutineId}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+      await fetch(`/api/permanent-tasks/${editingRoutineId}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
       showToast('Routine updated ✓');
     } else {
-      await fetch(`${API}/api/permanent-tasks`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+      await fetch('/api/permanent-tasks', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
       showToast('Routine added ✓');
     }
     closeRoutineModal(); await loadRoutine();
   }
 
-  // ── Modal close helpers ──
-  document.getElementById('modalOverlay').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
-  document.getElementById('routineModalOverlay').addEventListener('click', function(e) { if (e.target === this) closeRoutineModal(); });
+  document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target === document.getElementById('modalOverlay')) closeModal(); });
+  document.getElementById('routineModalOverlay').addEventListener('click', e => { if (e.target === document.getElementById('routineModalOverlay')) closeRoutineModal(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeRoutineModal(); } });
 
   function showToast(msg) {

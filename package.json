@@ -1,6 +1,6 @@
 {
   "name": "picasso-tracker",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Day-to-day task tracker for Web of Picasso CEO",
   "main": "server.js",
   "scripts": {
@@ -10,6 +10,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "pg": "^8.11.3",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
