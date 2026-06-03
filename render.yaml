@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: picasso-tracker
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+    disk:
+      name: data
+      mountPath: /opt/render/project/src
+      sizeGB: 1
