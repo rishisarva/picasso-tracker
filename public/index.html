@@ -31,6 +31,13 @@
   .btn-add:hover { transform: translateY(-1px); box-shadow: 0 4px 18px rgba(232,255,71,0.3); }
   .btn-add.routine-btn { background: var(--routine); }
   .btn-add.routine-btn:hover { box-shadow: 0 4px 18px rgba(56,189,248,0.3); }
+  .btn-backup {
+    background: transparent; border: 1px solid var(--border); color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600;
+    padding: 7px 13px; border-radius: var(--radius); cursor: pointer; transition: all 0.15s;
+  }
+  .btn-backup:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-import { display: inline-flex; align-items: center; }
 
   /* PAGES */
   .page { display: none; }
@@ -218,6 +225,11 @@
       <button class="page-tab routine-tab" onclick="switchPage('routine',this)">🔁 Daily Routine</button>
     </div>
     <span class="today-badge" id="headerDate">—</span>
+    <button class="btn-backup" onclick="exportData()" title="Download backup of all your data">⬇ Export</button>
+    <label class="btn-backup btn-import" title="Restore from a backup file">
+      ⬆ Import
+      <input type="file" accept=".json" onchange="importData(event)" style="display:none" />
+    </label>
     <button class="btn-add" id="mainAddBtn" onclick="openModal()">+ Add Task</button>
   </div>
 </header>
@@ -823,6 +835,38 @@
     const t = document.getElementById('toast');
     t.textContent = msg; t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // ── Export / Import ──
+  async function exportData() {
+    const a = document.createElement('a');
+    a.href = '/api/export';
+    a.download = '';
+    a.click();
+    showToast('Backup downloaded ✓');
+  }
+
+  async function importData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const json = JSON.parse(text);
+      if (!confirm(`Import backup from ${file.name}?\n\nThis will REPLACE all current data with:\n• ${json.tasks?.length || 0} tasks\n• ${json.permanentTasks?.length || 0} routine tasks\n\nCurrent data will be overwritten.`)) {
+        event.target.value = ''; return;
+      }
+      const res = await fetch('/api/import', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(json) });
+      const result = await res.json();
+      if (result.success) {
+        showToast(`Imported ${result.tasks} tasks + ${result.permanentTasks} routines ✓`);
+        await loadTasks(); await loadStats(); await loadRoutine();
+      } else {
+        showToast('Import failed: ' + result.error);
+      }
+    } catch (e) {
+      showToast('Invalid file — could not import');
+    }
+    event.target.value = '';
   }
 
   init();

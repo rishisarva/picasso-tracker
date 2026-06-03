@@ -1,249 +1,228 @@
 const express = require("express");
 const cors = require("cors");
-const { Pool } = require("pg");
-const { v4: uuidv4 } = require("uuid");
+const fs = require("fs");
 const path = require("path");
+const { v4: uuidv4 } = require("uuid");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// On Render with a disk mounted at /data, use that. Otherwise use local dir.
+const DATA_DIR = fs.existsSync("/data") ? "/data" : path.join(__dirname);
+const DATA_FILE = path.join(DATA_DIR, "picasso-data.json");
 
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-// ─── Supabase / Postgres connection ─────────────────────────────────────────
-if (!process.env.DATABASE_URL) {
-  console.error("❌ DATABASE_URL is not set.");
-  console.error("   Render → your service → Environment → Add DATABASE_URL");
-  console.error("   Value: your Supabase connection string (postgresql://...)");
-  process.exit(1);
+// ─── Data helpers ─────────────────────────────────────────────────────────────
+
+function loadData() {
+  if (!fs.existsSync(DATA_FILE)) {
+    const seed = {
+      tasks: [],
+      permanentTasks: [],
+      dailyCompletions: {}
+    };
+    fs.writeFileSync(DATA_FILE, JSON.stringify(seed, null, 2));
+    return seed;
+  }
+  try {
+    const data = JSON.parse(fs.readFileSync(DATA_FILE, "utf-8"));
+    if (!data.permanentTasks) data.permanentTasks = [];
+    if (!data.dailyCompletions) data.dailyCompletions = {};
+    return data;
+  } catch (e) {
+    console.error("Data file corrupt, resetting:", e.message);
+    const seed = { tasks: [], permanentTasks: [], dailyCompletions: {} };
+    fs.writeFileSync(DATA_FILE, JSON.stringify(seed, null, 2));
+    return seed;
+  }
 }
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
-  connectionTimeoutMillis: 10000,
-});
-
-// ─── DB init ─────────────────────────────────────────────────────────────────
-async function initDB() {
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS tasks (
-      id TEXT PRIMARY KEY,
-      title TEXT NOT NULL,
-      description TEXT DEFAULT '',
-      clients TEXT[] DEFAULT '{}',
-      status TEXT DEFAULT 'pending',
-      priority TEXT DEFAULT 'medium',
-      is_exception BOOLEAN DEFAULT FALSE,
-      date TEXT NOT NULL,
-      created_at TIMESTAMPTZ DEFAULT NOW(),
-      completed_at TIMESTAMPTZ
-    );
-
-    CREATE TABLE IF NOT EXISTS permanent_tasks (
-      id TEXT PRIMARY KEY,
-      title TEXT NOT NULL,
-      description TEXT DEFAULT '',
-      clients TEXT[] DEFAULT '{}',
-      priority TEXT DEFAULT 'medium',
-      created_at TIMESTAMPTZ DEFAULT NOW()
-    );
-
-    CREATE TABLE IF NOT EXISTS daily_completions (
-      id TEXT PRIMARY KEY,
-      task_id TEXT NOT NULL REFERENCES permanent_tasks(id) ON DELETE CASCADE,
-      date TEXT NOT NULL,
-      UNIQUE(task_id, date)
-    );
-  `);
-  console.log("✅ DB tables ready");
+function saveData(data) {
+  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
 }
 
-// ─── TASKS API ───────────────────────────────────────────────────────────────
+console.log(`📁 Data file: ${DATA_FILE}`);
 
-app.get("/api/tasks", async (req, res) => {
-  try {
-    let query = "SELECT * FROM tasks";
-    const params = [];
-    const conditions = [];
-    if (req.query.date) { conditions.push(`date = $${params.length+1}`); params.push(req.query.date); }
-    if (req.query.client) { conditions.push(`$${params.length+1} = ANY(clients)`); params.push(req.query.client); }
-    if (conditions.length) query += " WHERE " + conditions.join(" AND ");
-    query += " ORDER BY created_at DESC";
-    const { rows } = await pool.query(query, params);
-    res.json(rows.map(normalizeTask));
-  } catch (e) { res.status(500).json({ error: e.message }); }
+// ─── TASKS API ────────────────────────────────────────────────────────────────
+
+app.get("/api/tasks", (req, res) => {
+  const data = loadData();
+  let tasks = data.tasks;
+  if (req.query.date) tasks = tasks.filter(t => t.date === req.query.date);
+  if (req.query.client) tasks = tasks.filter(t => (t.clients||[]).includes(req.query.client));
+  res.json(tasks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
 });
 
-app.post("/api/tasks", async (req, res) => {
-  try {
-    const id = uuidv4();
-    const clients = Array.isArray(req.body.clients) ? req.body.clients : [req.body.clients || "AEO Agency"];
-    const { rows } = await pool.query(
-      `INSERT INTO tasks (id, title, description, clients, status, priority, is_exception, date)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
-      [id, req.body.title, req.body.description || "", clients,
-       req.body.status || "pending", req.body.priority || "medium",
-       req.body.isException || false,
-       req.body.date || new Date().toISOString().split("T")[0]]
-    );
-    res.status(201).json(normalizeTask(rows[0]));
-  } catch (e) { res.status(500).json({ error: e.message }); }
+app.post("/api/tasks", (req, res) => {
+  const data = loadData();
+  const clients = Array.isArray(req.body.clients) ? req.body.clients : [req.body.clients || "AEO Agency"];
+  const task = {
+    id: uuidv4(),
+    title: req.body.title,
+    description: req.body.description || "",
+    clients,
+    client: clients[0],
+    status: req.body.status || "pending",
+    priority: req.body.priority || "medium",
+    isException: req.body.isException || false,
+    date: req.body.date || new Date().toISOString().split("T")[0],
+    createdAt: new Date().toISOString(),
+    completedAt: null,
+  };
+  data.tasks.push(task);
+  saveData(data);
+  res.status(201).json(task);
 });
 
-app.put("/api/tasks/:id", async (req, res) => {
-  try {
-    const { rows: existing } = await pool.query("SELECT * FROM tasks WHERE id=$1", [req.params.id]);
-    if (!existing.length) return res.status(404).json({ error: "Not found" });
-    const t = existing[0];
-    const clients = req.body.clients !== undefined
-      ? (Array.isArray(req.body.clients) ? req.body.clients : [req.body.clients])
-      : t.clients;
-    const completedAt = req.body.status === "done" && !t.completed_at ? new Date().toISOString() : t.completed_at;
-    const { rows } = await pool.query(
-      `UPDATE tasks SET title=$1, description=$2, clients=$3, status=$4, priority=$5, is_exception=$6, date=$7, completed_at=$8 WHERE id=$9 RETURNING *`,
-      [req.body.title??t.title, req.body.description??t.description, clients,
-       req.body.status??t.status, req.body.priority??t.priority,
-       req.body.isException??t.is_exception, req.body.date??t.date, completedAt, req.params.id]
-    );
-    res.json(normalizeTask(rows[0]));
-  } catch (e) { res.status(500).json({ error: e.message }); }
+app.put("/api/tasks/:id", (req, res) => {
+  const data = loadData();
+  const idx = data.tasks.findIndex(t => t.id === req.params.id);
+  if (idx === -1) return res.status(404).json({ error: "Not found" });
+  const t = data.tasks[idx];
+  const clients = req.body.clients !== undefined
+    ? (Array.isArray(req.body.clients) ? req.body.clients : [req.body.clients])
+    : t.clients;
+  const updated = {
+    ...t, ...req.body, clients, client: clients[0],
+    completedAt: req.body.status === "done" && !t.completedAt ? new Date().toISOString() : t.completedAt,
+  };
+  data.tasks[idx] = updated;
+  saveData(data);
+  res.json(updated);
 });
 
-app.delete("/api/tasks/:id", async (req, res) => {
-  try {
-    await pool.query("DELETE FROM tasks WHERE id=$1", [req.params.id]);
-    res.json({ success: true });
-  } catch (e) { res.status(500).json({ error: e.message }); }
+app.delete("/api/tasks/:id", (req, res) => {
+  const data = loadData();
+  data.tasks = data.tasks.filter(t => t.id !== req.params.id);
+  saveData(data);
+  res.json({ success: true });
 });
 
-// ─── STATS API ───────────────────────────────────────────────────────────────
+// ─── STATS API ────────────────────────────────────────────────────────────────
 
-app.get("/api/stats", async (req, res) => {
-  try {
-    const today = new Date().toISOString().split("T")[0];
-    const { rows } = await pool.query("SELECT * FROM tasks");
-    const allTasks = rows.map(normalizeTask);
-    const todayTasks = allTasks.filter(t => t.date === today);
+app.get("/api/stats", (req, res) => {
+  const data = loadData();
+  const today = new Date().toISOString().split("T")[0];
+  const todayTasks = data.tasks.filter(t => t.date === today);
 
-    const last7 = [];
-    for (let i = 6; i >= 0; i--) {
-      const d = new Date(); d.setDate(d.getDate() - i);
-      const ds = d.toISOString().split("T")[0];
-      const day = allTasks.filter(t => t.date === ds);
-      last7.push({ date: ds, total: day.length, done: day.filter(t => t.status==="done").length, exceptions: day.filter(t => t.isException).length });
-    }
+  const last7 = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const ds = d.toISOString().split("T")[0];
+    const day = data.tasks.filter(t => t.date === ds);
+    last7.push({ date: ds, total: day.length, done: day.filter(t => t.status === "done").length, exceptions: day.filter(t => t.isException).length });
+  }
 
-    const CLIENTS = ["AEO Agency", "Flavors", "Enjoy Hemp"];
-    const clientStats = {};
-    CLIENTS.forEach(c => {
-      const ct = allTasks.filter(t => t.clients.includes(c));
-      clientStats[c] = { total: ct.length, done: ct.filter(t=>t.status==="done").length, pending: ct.filter(t=>t.status==="pending").length };
-    });
+  const CLIENTS = ["AEO Agency", "Flavors", "Enjoy Hemp"];
+  const clientStats = {};
+  CLIENTS.forEach(c => {
+    const ct = data.tasks.filter(t => (t.clients||[t.client]).includes(c));
+    clientStats[c] = { total: ct.length, done: ct.filter(t => t.status === "done").length, pending: ct.filter(t => t.status === "pending").length };
+  });
 
-    res.json({
-      today: { total: todayTasks.length, done: todayTasks.filter(t=>t.status==="done").length, pending: todayTasks.filter(t=>t.status==="pending").length, exceptions: todayTasks.filter(t=>t.isException).length },
-      last7Days: last7, clientStats,
-      allTime: { total: allTasks.length, done: allTasks.filter(t=>t.status==="done").length, exceptions: allTasks.filter(t=>t.isException).length },
-    });
-  } catch (e) { res.status(500).json({ error: e.message }); }
+  res.json({
+    today: { total: todayTasks.length, done: todayTasks.filter(t => t.status === "done").length, pending: todayTasks.filter(t => t.status === "pending").length, exceptions: todayTasks.filter(t => t.isException).length },
+    last7Days: last7, clientStats,
+    allTime: { total: data.tasks.length, done: data.tasks.filter(t => t.status === "done").length, exceptions: data.tasks.filter(t => t.isException).length },
+  });
 });
 
-// ─── PERMANENT TASKS API ─────────────────────────────────────────────────────
+// ─── PERMANENT TASKS API ──────────────────────────────────────────────────────
 
-app.get("/api/permanent-tasks/history", async (req, res) => {
-  try {
-    const { rows: total } = await pool.query("SELECT COUNT(*) as count FROM permanent_tasks");
-    const totalCount = parseInt(total[0].count);
-    const history = [];
-    for (let i = 29; i >= 0; i--) {
-      const d = new Date(); d.setDate(d.getDate() - i);
-      const ds = d.toISOString().split("T")[0];
-      const { rows } = await pool.query("SELECT COUNT(*) as count FROM daily_completions WHERE date=$1", [ds]);
-      history.push({ date: ds, done: parseInt(rows[0].count), total: totalCount });
-    }
-    res.json(history);
-  } catch (e) { res.status(500).json({ error: e.message }); }
+app.get("/api/permanent-tasks/history", (req, res) => {
+  const data = loadData();
+  const history = [];
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const ds = d.toISOString().split("T")[0];
+    const done = (data.dailyCompletions[ds] || []).length;
+    history.push({ date: ds, done, total: data.permanentTasks.length });
+  }
+  res.json(history);
 });
 
-app.get("/api/permanent-tasks", async (req, res) => {
-  try {
-    const today = new Date().toISOString().split("T")[0];
-    const { rows: tasks } = await pool.query("SELECT * FROM permanent_tasks ORDER BY created_at ASC");
-    const { rows: done } = await pool.query("SELECT task_id FROM daily_completions WHERE date=$1", [today]);
-    const doneIds = new Set(done.map(r => r.task_id));
-    res.json(tasks.map(t => ({ ...normalizePermanent(t), doneToday: doneIds.has(t.id) })));
-  } catch (e) { res.status(500).json({ error: e.message }); }
+app.get("/api/permanent-tasks", (req, res) => {
+  const data = loadData();
+  const today = new Date().toISOString().split("T")[0];
+  const doneToday = new Set(data.dailyCompletions[today] || []);
+  res.json(data.permanentTasks.map(t => ({ ...t, doneToday: doneToday.has(t.id) })));
 });
 
-app.post("/api/permanent-tasks", async (req, res) => {
-  try {
-    const id = uuidv4();
-    const clients = Array.isArray(req.body.clients) ? req.body.clients : [req.body.clients || "AEO Agency"];
-    const { rows } = await pool.query(
-      `INSERT INTO permanent_tasks (id, title, description, clients, priority) VALUES ($1,$2,$3,$4,$5) RETURNING *`,
-      [id, req.body.title, req.body.description || "", clients, req.body.priority || "medium"]
-    );
-    res.status(201).json(normalizePermanent(rows[0]));
-  } catch (e) { res.status(500).json({ error: e.message }); }
+app.post("/api/permanent-tasks", (req, res) => {
+  const data = loadData();
+  const clients = Array.isArray(req.body.clients) ? req.body.clients : [req.body.clients || "AEO Agency"];
+  const task = { id: uuidv4(), title: req.body.title, description: req.body.description || "", clients, client: clients[0], priority: req.body.priority || "medium", createdAt: new Date().toISOString() };
+  data.permanentTasks.push(task);
+  saveData(data);
+  res.status(201).json(task);
 });
 
-app.put("/api/permanent-tasks/:id", async (req, res) => {
-  try {
-    const { rows: existing } = await pool.query("SELECT * FROM permanent_tasks WHERE id=$1", [req.params.id]);
-    if (!existing.length) return res.status(404).json({ error: "Not found" });
-    const t = existing[0];
-    const clients = req.body.clients !== undefined
-      ? (Array.isArray(req.body.clients) ? req.body.clients : [req.body.clients])
-      : t.clients;
-    const { rows } = await pool.query(
-      `UPDATE permanent_tasks SET title=$1, description=$2, clients=$3, priority=$4 WHERE id=$5 RETURNING *`,
-      [req.body.title??t.title, req.body.description??t.description, clients, req.body.priority??t.priority, req.params.id]
-    );
-    res.json(normalizePermanent(rows[0]));
-  } catch (e) { res.status(500).json({ error: e.message }); }
+app.put("/api/permanent-tasks/:id", (req, res) => {
+  const data = loadData();
+  const idx = data.permanentTasks.findIndex(t => t.id === req.params.id);
+  if (idx === -1) return res.status(404).json({ error: "Not found" });
+  const t = data.permanentTasks[idx];
+  const clients = req.body.clients !== undefined ? (Array.isArray(req.body.clients) ? req.body.clients : [req.body.clients]) : t.clients;
+  data.permanentTasks[idx] = { ...t, ...req.body, clients, client: clients[0] };
+  saveData(data);
+  res.json(data.permanentTasks[idx]);
 });
 
-app.delete("/api/permanent-tasks/:id", async (req, res) => {
-  try {
-    await pool.query("DELETE FROM permanent_tasks WHERE id=$1", [req.params.id]);
-    res.json({ success: true });
-  } catch (e) { res.status(500).json({ error: e.message }); }
+app.delete("/api/permanent-tasks/:id", (req, res) => {
+  const data = loadData();
+  data.permanentTasks = data.permanentTasks.filter(t => t.id !== req.params.id);
+  Object.keys(data.dailyCompletions).forEach(date => {
+    data.dailyCompletions[date] = data.dailyCompletions[date].filter(id => id !== req.params.id);
+  });
+  saveData(data);
+  res.json({ success: true });
 });
 
-app.post("/api/permanent-tasks/:id/toggle", async (req, res) => {
-  try {
-    const today = new Date().toISOString().split("T")[0];
-    const { rows } = await pool.query("SELECT id FROM daily_completions WHERE task_id=$1 AND date=$2", [req.params.id, today]);
-    if (rows.length) {
-      await pool.query("DELETE FROM daily_completions WHERE task_id=$1 AND date=$2", [req.params.id, today]);
-      res.json({ doneToday: false });
-    } else {
-      await pool.query("INSERT INTO daily_completions (id, task_id, date) VALUES ($1,$2,$3)", [uuidv4(), req.params.id, today]);
-      res.json({ doneToday: true });
-    }
-  } catch (e) { res.status(500).json({ error: e.message }); }
+app.post("/api/permanent-tasks/:id/toggle", (req, res) => {
+  const data = loadData();
+  const today = new Date().toISOString().split("T")[0];
+  if (!data.dailyCompletions[today]) data.dailyCompletions[today] = [];
+  const list = data.dailyCompletions[today];
+  const idx = list.indexOf(req.params.id);
+  if (idx === -1) list.push(req.params.id);
+  else list.splice(idx, 1);
+  saveData(data);
+  res.json({ doneToday: idx === -1 });
 });
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+// ─── EXPORT / IMPORT ──────────────────────────────────────────────────────────
 
-function normalizeTask(r) {
-  return { id: r.id, title: r.title, description: r.description, clients: r.clients || [], client: (r.clients||[])[0] || "AEO Agency", status: r.status, priority: r.priority, isException: r.is_exception, date: r.date, createdAt: r.created_at, completedAt: r.completed_at };
-}
-function normalizePermanent(r) {
-  return { id: r.id, title: r.title, description: r.description, clients: r.clients || [], client: (r.clients||[])[0] || "AEO Agency", priority: r.priority, createdAt: r.created_at };
-}
+app.get("/api/export", (req, res) => {
+  const data = loadData();
+  const filename = `picasso-backup-${new Date().toISOString().split("T")[0]}.json`;
+  res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+  res.setHeader("Content-Type", "application/json");
+  res.send(JSON.stringify(data, null, 2));
+});
 
-// ─── Ping ────────────────────────────────────────────────────────────────────
+app.post("/api/import", (req, res) => {
+  try {
+    const incoming = req.body;
+    if (!incoming || typeof incoming !== "object") return res.status(400).json({ error: "Invalid data" });
+    // Validate basic shape
+    if (!Array.isArray(incoming.tasks)) return res.status(400).json({ error: "Missing tasks array" });
+    const merged = {
+      tasks: incoming.tasks || [],
+      permanentTasks: incoming.permanentTasks || [],
+      dailyCompletions: incoming.dailyCompletions || {},
+    };
+    saveData(merged);
+    res.json({ success: true, tasks: merged.tasks.length, permanentTasks: merged.permanentTasks.length });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ─── Ping ─────────────────────────────────────────────────────────────────────
 app.get("/ping", (req, res) => res.json({ status: "alive", time: new Date().toISOString() }));
 app.get("*", (req, res) => res.sendFile(path.join(__dirname, "public", "index.html")));
 
-// ─── Start ───────────────────────────────────────────────────────────────────
-initDB().then(() => {
-  app.listen(PORT, () => console.log(`🎨 Picasso Tracker running on port ${PORT}`));
-}).catch(err => {
-  console.error("❌ DB init failed:", err.message);
-  console.error("   Check your DATABASE_URL is correct in Render environment variables.");
-  process.exit(1);
-});
+app.listen(PORT, () => console.log(`🎨 Picasso Tracker running on port ${PORT}`));
