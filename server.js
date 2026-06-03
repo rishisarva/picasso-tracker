@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 function loadData() {
   if (!fs.existsSync(DATA_FILE)) {
-    const seed = { tasks: [], clients: ["Yo Agencies", "Flavors", "Enjoy Hemp"], permanentTasks: [], dailyCompletions: {} };
+    const seed = { tasks: [], clients: ["AEO Agency", "Flavors", "Enjoy Hemp"], permanentTasks: [], dailyCompletions: {} };
     fs.writeFileSync(DATA_FILE, JSON.stringify(seed, null, 2));
     return seed;
   }

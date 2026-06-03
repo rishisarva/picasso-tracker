@@ -21,10 +21,9 @@
     --pending: #facc15;
     --exception: #f87171;
     --routine: #38bdf8;
-    --yo: #7b61ff;
+    --aeo: #7b61ff;
     --flavors: #ff6b35;
     --hemp: #4ade80;
-    --internal: #60a5fa;
     --radius: 6px;
   }
 
@@ -160,10 +159,9 @@
     position: relative; overflow: hidden;
   }
   .task-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
-  .task-card[data-client="Yo Agencies"]::before { background: var(--yo); }
+  .task-card[data-client="AEO Agency"]::before { background: var(--aeo); }
   .task-card[data-client="Flavors"]::before { background: var(--flavors); }
   .task-card[data-client="Enjoy Hemp"]::before { background: var(--hemp); }
-  .task-card[data-client="Internal"]::before { background: var(--internal); }
   .task-card:hover { border-color: #333; transform: translateX(2px); }
   .task-card.exception-card { border-color: rgba(248,113,113,0.25); }
 
@@ -182,13 +180,11 @@
   .task-meta { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 
   .tag { font-size: 10.5px; padding: 2px 8px; border-radius: 3px; font-weight: 600; letter-spacing: 0.3px; }
-  .tag-client-yo { background: rgba(123,97,255,0.15); color: var(--yo); }
+  .tag-client-aeo { background: rgba(123,97,255,0.15); color: var(--aeo); }
   .tag-client-flavors { background: rgba(255,107,53,0.15); color: var(--flavors); }
   .tag-client-hemp { background: rgba(74,222,128,0.15); color: var(--hemp); }
-  .tag-client-internal { background: rgba(96,165,250,0.15); color: var(--internal); }
   .tag-exception { background: rgba(248,113,113,0.15); color: var(--exception); }
   .tag-routine { background: rgba(56,189,248,0.15); color: var(--routine); }
-  .tag-category { background: var(--surface2); color: var(--text-muted); }
 
   .priority-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
   .p-high { background: #f87171; } .p-medium { background: #facc15; } .p-low { background: #4ade80; }
@@ -472,9 +468,9 @@
       </div>
       <div>
         <div class="sidebar-section-title">Clients</div>
-        <div class="nav-item" data-view="client-Yo Agencies" onclick="setView('client-Yo Agencies', this)">
-          <span><span class="client-dot" style="background:var(--yo)"></span>Yo Agencies</span>
-          <span class="nav-count" id="nav-yo">0</span>
+        <div class="nav-item" data-view="client-AEO Agency" onclick="setView('client-AEO Agency', this)">
+          <span><span class="client-dot" style="background:var(--aeo)"></span>AEO Agency</span>
+          <span class="nav-count" id="nav-aeo">0</span>
         </div>
         <div class="nav-item" data-view="client-Flavors" onclick="setView('client-Flavors', this)">
           <span><span class="client-dot" style="background:var(--flavors)"></span>Flavors</span>
@@ -483,10 +479,6 @@
         <div class="nav-item" data-view="client-Enjoy Hemp" onclick="setView('client-Enjoy Hemp', this)">
           <span><span class="client-dot" style="background:var(--hemp)"></span>Enjoy Hemp</span>
           <span class="nav-count" id="nav-hemp">0</span>
-        </div>
-        <div class="nav-item" data-view="client-Internal" onclick="setView('client-Internal', this)">
-          <span><span class="client-dot" style="background:var(--internal)"></span>Internal</span>
-          <span class="nav-count" id="nav-internal">0</span>
         </div>
       </div>
     </aside>
@@ -611,29 +603,13 @@
       <label class="form-label">Description</label>
       <textarea class="form-textarea" id="fDesc" placeholder="Details, notes, links…"></textarea>
     </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Client</label>
-        <select class="form-select" id="fClient">
-          <option value="Internal">Internal</option>
-          <option value="Yo Agencies">Yo Agencies</option>
-          <option value="Flavors">Flavors</option>
-          <option value="Enjoy Hemp">Enjoy Hemp</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Category</label>
-        <select class="form-select" id="fCategory">
-          <option value="Internal Linking">Internal Linking</option>
-          <option value="SEO">SEO</option>
-          <option value="Content">Content</option>
-          <option value="Strategy">Strategy</option>
-          <option value="Client Call">Client Call</option>
-          <option value="Review">Review</option>
-          <option value="Admin">Admin</option>
-          <option value="General">General</option>
-        </select>
-      </div>
+    <div class="form-group">
+      <label class="form-label">Client</label>
+      <select class="form-select" id="fClient">
+        <option value="AEO Agency">AEO Agency</option>
+        <option value="Flavors">Flavors</option>
+        <option value="Enjoy Hemp">Enjoy Hemp</option>
+      </select>
     </div>
     <div class="form-row">
       <div class="form-group">
@@ -680,28 +656,13 @@
       <label class="form-label">Description</label>
       <textarea class="form-textarea" id="rfDesc" placeholder="Brief note about this routine…" style="min-height:60px"></textarea>
     </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Client</label>
-        <select class="form-select" id="rfClient">
-          <option value="Internal">Internal</option>
-          <option value="Yo Agencies">Yo Agencies</option>
-          <option value="Flavors">Flavors</option>
-          <option value="Enjoy Hemp">Enjoy Hemp</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Category</label>
-        <select class="form-select" id="rfCategory">
-          <option value="Internal Linking">Internal Linking</option>
-          <option value="SEO">SEO</option>
-          <option value="Content">Content</option>
-          <option value="Strategy">Strategy</option>
-          <option value="Review">Review</option>
-          <option value="Admin">Admin</option>
-          <option value="General">General</option>
-        </select>
-      </div>
+    <div class="form-group">
+      <label class="form-label">Client</label>
+      <select class="form-select" id="rfClient">
+        <option value="AEO Agency">AEO Agency</option>
+        <option value="Flavors">Flavors</option>
+        <option value="Enjoy Hemp">Enjoy Hemp</option>
+      </select>
     </div>
     <div class="form-group">
       <label class="form-label">Priority</label>
@@ -789,7 +750,7 @@
       return `<div class="bar-col"><div class="bar-fill${isToday?' today-bar':''}" style="height:${h}px" title="${d.total} tasks on ${d.date}"></div><div class="bar-day">${label}</div></div>`;
     }).join('');
 
-    const clients = [{ name:'Yo Agencies', color:'var(--yo)' }, { name:'Flavors', color:'var(--flavors)' }, { name:'Enjoy Hemp', color:'var(--hemp)' }];
+    const clients = [{ name:'AEO Agency', color:'var(--aeo)' }, { name:'Flavors', color:'var(--flavors)' }, { name:'Enjoy Hemp', color:'var(--hemp)' }];
     document.getElementById('clientProgress').innerHTML = clients.map(c => {
       const stat = s.clientStats[c.name] || { total:0, done:0 };
       const pct = stat.total ? Math.round((stat.done/stat.total)*100) : 0;
@@ -803,10 +764,9 @@
     document.getElementById('nav-all').textContent = allTasks.length;
     document.getElementById('nav-exceptions').textContent = allTasks.filter(t => t.isException).length;
     document.getElementById('nav-done').textContent = allTasks.filter(t => t.status === 'done').length;
-    document.getElementById('nav-yo').textContent = allTasks.filter(t => t.client === 'Yo Agencies').length;
+    document.getElementById('nav-aeo').textContent = allTasks.filter(t => t.client === 'AEO Agency').length;
     document.getElementById('nav-flavors').textContent = allTasks.filter(t => t.client === 'Flavors').length;
     document.getElementById('nav-hemp').textContent = allTasks.filter(t => t.client === 'Enjoy Hemp').length;
-    document.getElementById('nav-internal').textContent = allTasks.filter(t => t.client === 'Internal').length;
   }
 
   function getFilteredTasks() {
@@ -832,7 +792,7 @@
       list.innerHTML = `<div class="empty-state"><div class="empty-state-icon">📋</div><div class="empty-state-text">No tasks here yet.<br/>Hit <strong>+ Add Task</strong> to start.</div></div>`;
       return;
     }
-    const clientClass = { 'Yo Agencies':'tag-client-yo','Flavors':'tag-client-flavors','Enjoy Hemp':'tag-client-hemp','Internal':'tag-client-internal' };
+    const clientClass = { 'AEO Agency':'tag-client-aeo','Flavors':'tag-client-flavors','Enjoy Hemp':'tag-client-hemp' };
     list.innerHTML = tasks.map(t => `
       <div class="task-card${t.isException?' exception-card':''}" data-client="${t.client}">
         <div class="task-check${t.status==='done'?' checked':''}" onclick="toggleDone('${t.id}')"></div>
@@ -840,8 +800,7 @@
           <div class="task-title${t.status==='done'?' done-title':''}">${escHtml(t.title)}</div>
           ${t.description?`<div class="task-desc">${escHtml(t.description)}</div>`:''}
           <div class="task-meta">
-            <span class="tag ${clientClass[t.client]||'tag-client-internal'}">${t.client}</span>
-            <span class="tag tag-category">${t.category}</span>
+            <span class="tag ${clientClass[t.client]||'tag-client-aeo'}">${t.client}</span>
             ${t.isException?`<span class="tag tag-exception">⚡ Exception</span>`:''}
             <span class="priority-dot p-${t.priority}" title="Priority: ${t.priority}"></span>
             <span style="font-size:11px;color:var(--text-dim)">${t.date}</span>
@@ -861,7 +820,7 @@
     if (!title) { showToast('Task title is required!'); return; }
     const payload = {
       title, description: document.getElementById('fDesc').value.trim(),
-      client: document.getElementById('fClient').value, category: document.getElementById('fCategory').value,
+      client: document.getElementById('fClient').value,
       priority: document.getElementById('fPriority').value, status: document.getElementById('fStatus').value,
       isException: document.getElementById('fException').checked,
       date: document.getElementById('fDate').value || todayStr(),
@@ -893,7 +852,7 @@
     currentView = view;
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     el.classList.add('active');
-    const titles = { today:"TODAY'S TASKS", all:"ALL TASKS", exceptions:"EXCEPTIONS", done:"COMPLETED TASKS", 'client-Yo Agencies':"YO AGENCIES", 'client-Flavors':"FLAVORS", 'client-Enjoy Hemp':"ENJOY HEMP", 'client-Internal':"INTERNAL TASKS" };
+    const titles = { today:"TODAY'S TASKS", all:"ALL TASKS", exceptions:"EXCEPTIONS", done:"COMPLETED TASKS", 'client-AEO Agency':"AEO AGENCY", 'client-Flavors':"FLAVORS", 'client-Enjoy Hemp':"ENJOY HEMP" };
     document.getElementById('mainTitle').textContent = titles[view] || view.toUpperCase();
     renderTasks();
   }
@@ -917,8 +876,7 @@
     document.getElementById('modalTitle').textContent = 'ADD TASK';
     document.getElementById('fTitle').value = '';
     document.getElementById('fDesc').value = '';
-    document.getElementById('fClient').value = 'Internal';
-    document.getElementById('fCategory').value = 'General';
+    document.getElementById('fClient').value = 'AEO Agency';
     document.getElementById('fPriority').value = 'medium';
     document.getElementById('fStatus').value = 'pending';
     document.getElementById('fException').checked = false;
@@ -934,7 +892,6 @@
     document.getElementById('fTitle').value = task.title;
     document.getElementById('fDesc').value = task.description || '';
     document.getElementById('fClient').value = task.client;
-    document.getElementById('fCategory').value = task.category;
     document.getElementById('fPriority').value = task.priority;
     document.getElementById('fStatus').value = task.status;
     document.getElementById('fException').checked = task.isException;
@@ -977,7 +934,7 @@
       return;
     }
 
-    const clientClass = { 'Yo Agencies':'tag-client-yo','Flavors':'tag-client-flavors','Enjoy Hemp':'tag-client-hemp','Internal':'tag-client-internal' };
+    const clientClass = { 'AEO Agency':'tag-client-aeo','Flavors':'tag-client-flavors','Enjoy Hemp':'tag-client-hemp' };
     const sorted = [...allRoutines].sort((a,b) => {
       if (a.doneToday && !b.doneToday) return 1;
       if (!a.doneToday && b.doneToday) return -1;
@@ -992,8 +949,7 @@
           <div class="routine-task-title${r.doneToday?' done-title':''}">${escHtml(r.title)}</div>
           ${r.description?`<div class="routine-task-desc">${escHtml(r.description)}</div>`:''}
           <div class="routine-task-meta">
-            <span class="tag ${clientClass[r.client]||'tag-client-internal'}">${r.client}</span>
-            <span class="tag tag-category">${r.category}</span>
+            <span class="tag ${clientClass[r.client]||'tag-client-aeo'}">${r.client}</span>
             <span class="tag tag-routine">🔁 Daily</span>
             <span class="priority-dot p-${r.priority}" title="Priority: ${r.priority}"></span>
           </div>
@@ -1039,8 +995,7 @@
     document.getElementById('routineModalTitle').textContent = 'ADD ROUTINE TASK';
     document.getElementById('rfTitle').value = '';
     document.getElementById('rfDesc').value = '';
-    document.getElementById('rfClient').value = 'Internal';
-    document.getElementById('rfCategory').value = 'General';
+    document.getElementById('rfClient').value = 'AEO Agency';
     document.getElementById('rfPriority').value = 'medium';
     document.getElementById('routineModalOverlay').classList.add('open');
   }
@@ -1053,7 +1008,6 @@
     document.getElementById('rfTitle').value = r.title;
     document.getElementById('rfDesc').value = r.description || '';
     document.getElementById('rfClient').value = r.client;
-    document.getElementById('rfCategory').value = r.category;
     document.getElementById('rfPriority').value = r.priority;
     document.getElementById('routineModalOverlay').classList.add('open');
   }
@@ -1065,7 +1019,7 @@
     if (!title) { showToast('Title is required!'); return; }
     const payload = {
       title, description: document.getElementById('rfDesc').value.trim(),
-      client: document.getElementById('rfClient').value, category: document.getElementById('rfCategory').value,
+      client: document.getElementById('rfClient').value,
       priority: document.getElementById('rfPriority').value,
     };
     if (editingRoutineId) {
